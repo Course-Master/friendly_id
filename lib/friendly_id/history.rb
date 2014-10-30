@@ -108,9 +108,9 @@ method.
     def scope_for_slug_generator
       relation = super
       return relation if new_record?
-      relation = relation.merge(Slug.where('sluggable_id <> ?', id))
+      relation = relation.merge(Slug.where.not(sluggable_id: id))
       if friendly_id_config.uses?(:scoped)
-        relation = relation.where(:scope => serialized_scope)
+        relation = relation.merge(Slug.where(scope: serialized_scope))
       end
       relation
     end
